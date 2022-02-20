@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ApexCharts
 {
-    public class ApexPointSeries<TItem> : ApexBaseSeries<TItem>, IApexSeries<TItem> where TItem : class
+    public class ApexNoAxisSeries<TItem> : ApexBaseSeries<TItem>, IApexSeries<TItem> where TItem : class
     {
         [Parameter] public Func<TItem, decimal?> YValue { get; set; }
         [Parameter] public Func<IEnumerable<TItem>, decimal?> YAggregate { get; set; }
-        [Parameter] public Func<DataPoint<TItem>, object> OrderBy { get; set; }
-        [Parameter] public Func<DataPoint<TItem>, object> OrderByDescending { get; set; }
-        [Parameter] public SeriesType SeriesType { get; set; }
+        [Parameter] public Func<NoAxisPoint<TItem>, object> OrderBy { get; set; }
+        [Parameter] public Func<NoAxisPoint<TItem>, object> OrderByDescending { get; set; }
+        [Parameter] public NoAxisType NoAxisType { get; set; }
 
         protected override void OnInitialized()
         {
@@ -24,44 +24,29 @@ namespace ApexCharts
 
         public ChartType GetChartType()
         {
-            switch (SeriesType)
+            switch (NoAxisType)
             {
-                case SeriesType.Area:
-                    return ChartType.Area;
-                case SeriesType.Bar:
-                    return ChartType.Bar;
-                case SeriesType.Donut:
+
+                case NoAxisType.Donut:
                     return ChartType.Donut;
-                case SeriesType.Heatmap:
-                    return ChartType.Heatmap;
-                case SeriesType.Histogram:
-                    return ChartType.Histogram;
-                case SeriesType.Line:
-                    return ChartType.Line;
-                case SeriesType.Pie:
+                case NoAxisType.Pie:
                     return ChartType.Pie;
-                case SeriesType.PolarArea:
+                case NoAxisType.PolarArea:
                     return ChartType.PolarArea;
-                case SeriesType.Radar:
-                    return ChartType.Radar;
-                case SeriesType.RadialBar:
+                case NoAxisType.RadialBar:
                     return ChartType.RadialBar;
-                case SeriesType.Scatter:
-                    return ChartType.Scatter;
-                case SeriesType.Treemap:
-                    return ChartType.Treemap;
                 default:
-                    throw new SystemException($"SeriesType {SeriesType} can not be converted to CartType");
+                    throw new SystemException($"SeriesType {NoAxisType} can not be converted to CartType");
             }
         }
 
-        public IEnumerable<IDataPoint<TItem>> GenerateDataPoints(IEnumerable<TItem> items) 
+        public IEnumerable<IDataPoint<TItem>> GenerateDataPoints(IEnumerable<TItem> items)
         {
-            IEnumerable<DataPoint<TItem>> data;
+            IEnumerable<NoAxisPoint<TItem>> data;
 
             if (YValue != null)
             {
-                data = items.Select(e => new DataPoint<TItem>
+                data = items.Select(e => new NoAxisPoint<TItem>
                 {
                     X = XValue.Invoke(e),
                     Y = YValue.Invoke(e),
@@ -72,7 +57,7 @@ namespace ApexCharts
             else if (YAggregate != null)
             {
                 data = items.GroupBy(XValue)
-               .Select(d => new DataPoint<TItem>
+               .Select(d => new NoAxisPoint<TItem>
                {
                    X = d.Key,
                    Y = YAggregate.Invoke(d),
@@ -108,6 +93,6 @@ namespace ApexCharts
             Chart.RemoveSeries(this);
         }
 
-     
+
     }
 }

@@ -200,12 +200,15 @@ namespace ApexCharts
                 Options.Labels = null;
                 return;
             };
-
-            if (Options.Series == null || !Options.Series.Any()) { return; }
             var noAxisSeries = Options.Series.First();
-            var data = noAxisSeries.Data.Cast<DataPoint<TItem>>().ToList();
-            Options.SeriesNonXAxis = data.Select(e => e.Y).Cast<object>().ToList();
-            Options.Labels = data.Select(e => e.X?.ToString()).ToList();
+
+            Options.Labels = noAxisSeries.Data.Select(e => e.X?.ToString()).ToList();
+
+            //if (Options.Series == null || !Options.Series.Any()) { return; }
+            //var noAxisSeries = Options.Series.First();
+            //var data = noAxisSeries.Data.Cast<DataPoint<TItem>>().ToList();
+            //Options.SeriesNonXAxis = data.Select(e => e.Y).Cast<object>().ToList();
+            //Options.Labels = data.Select(e => e.X?.ToString()).ToList();
         }
 
         private void FixLineDataSelection()

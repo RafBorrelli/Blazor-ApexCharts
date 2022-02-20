@@ -32,6 +32,9 @@ namespace ApexCharts
         [JsonIgnore]
         public IApexSeries<TItem> ApexSeries { get; set; }
 
+        [JsonIgnore]
+        public bool IsNoAxis => true;
+
     }
 
     public enum MixedType

@@ -20,10 +20,18 @@ namespace ApexCharts.Models
             else
             {
                 var type = value.GetType();
-                JsonSerializer.Serialize(writer, value, type, options);
+                if (value is NoAxisPoint<T> noAxisPoint)
+                {
+                    JsonSerializer.Serialize(writer, noAxisPoint.Y, typeof(decimal), options);
+                }
+                else
+                {
+                    JsonSerializer.Serialize(writer, value, type, options);
+                }
+
             }
 
-      
+
             //    if (value is DataPoint<T> dataPoint)
             //        JsonSerializer.Serialize(writer, dataPoint, typeof(DataPoint<T>), options);
             //    else if (value is BubblePoint<T> bubblePoint)
